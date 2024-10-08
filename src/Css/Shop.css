@@ -1,0 +1,20 @@
+/* src/Css/shop.css */
+
+.shop-container {
+    display: flex;
+    padding: 20px;
+  }
+  
+  .sidebar {
+    width: 20%;
+    margin-right: 20px;
+  }
+  
+  .categories {
+    margin-top: 20px;
+  }
+  
+  .product-list {
+    width: 80%;
+  }
+  
