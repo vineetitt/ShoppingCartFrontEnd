@@ -1,0 +1,114 @@
+/* src/pages/Home.css */
+
+.home-container {
+    min-height: 100vh;  /* Ensures full screen for the image area */
+    background-image: url('../assets/images/Background.jpg'); 
+    background-size: cover;
+    background-position: center; 
+    background-repeat: no-repeat; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.content {
+    text-align: center;
+    color: white; 
+    z-index: 1;
+    margin-bottom: 50px; 
+}
+
+h1 {
+    font-size: 5rem;
+    margin: 0;
+    color: green;
+}
+
+
+/* Product section styles */
+.product-section {
+    padding: 50px 20px; 
+    background-color: #f9f9f9; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.products-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap; 
+}
+
+.product-card {
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px; 
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+
+.product-image {
+    width: 100%;
+    height: 200px; 
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product-title {
+    font-size: 1.5rem;
+    margin: 15px 0 10px;
+}
+
+.product-description {
+    font-size: 1rem;
+    color: #555;
+}
+
+.product-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 10px 0;
+    color: #ff6347;
+}
+
+
+
+
+.testimonial-section {
+    padding: 50px 20px; 
+    background-color: #f9f9f9; 
+    text-align: center; /* Centering the text */
+}
+
+.testimonial-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap; 
+}
+
+.testimonial-card {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    width: 250px; 
+    text-align: left; /* Aligning text to the left */
+
+}
+
+.customer-image {
+    width: 50px; /* Adjust width as needed */
+    height: 50px; /* Adjust height as needed */
+    border-radius: 50%; /* Makes the image circular */
+    object-fit: cover; /* Ensures the image covers the area without distortion */
+    margin-bottom: 10px; /* Space between image and text */
+}
+
+
