@@ -1,28 +1,41 @@
-.footer-container {
+/* Ensure the entire app container takes at least the height of the viewport */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Minimum height of the viewport */
+  }
+  
+  /* Main content should take available space but allow the footer to be pushed down */
+  .main-content {
+    flex: 1; /* This makes sure the main content grows and takes available space */
+  }
+  
+  /* Footer styles */
+  .footer-container {
     display: flex; /* Use flexbox for alignment */
     justify-content: space-between; /* Space out the left, center, and right sections */
     align-items: center; /* Center vertically */
     padding: 5px 10px; /* Add padding around the footer */
     background-color: #333; /* Background color */
     color: white; /* Text color */
-}
-
-
-.footer-left, .footer-right {
+  }
+  
+  .footer-left, .footer-right {
     display: flex; /* Use flexbox for alignment within the left and right sections */
-}
-
-.footer-left a, .footer-right p {
+  }
+  
+  .footer-left a, .footer-right p {
     margin: 0 15px; /* Space between items */
     text-decoration: none; /* Remove underline from links */
     color: white; /* Text color */
-}
-
-.footer-left a:hover {
+  }
+  
+  .footer-left a:hover {
     text-decoration: underline; /* Add underline on hover for links */
-}
-
-.footer-center {
+  }
+  
+  .footer-center {
     flex-grow: 1; /* Allow the center to take available space */
     text-align: center; /* Center the text */
-}
+  }
+  
