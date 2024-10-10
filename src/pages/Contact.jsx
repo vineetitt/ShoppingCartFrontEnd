@@ -5,7 +5,7 @@ import { Facebook, Twitter, Instagram } from '@mui/icons-material';
 const Contact = () => {
   return (
     <Container maxWidth="md">
-      {/* Heading Section */}
+      
       <Box textAlign="center" mt={5}>
         <Typography variant="h4" component="h2" gutterBottom>
           Contact Us
@@ -15,14 +15,14 @@ const Contact = () => {
         </Typography>
       </Box>
 
-      {/* Contact Info Section */}
+      
       <Box textAlign="center" mb={4}>
         <Typography variant="body1">Email: contact@company.com</Typography>
         <Typography variant="body1">Phone: +123-456-7890</Typography>
         <Typography variant="body1">Address: 123 Main St, City, Country</Typography>
 
         <Box mt={2}>
-          {/* Social Media Icons */}
+          
           <Link href="https://facebook.com" target="_blank" rel="noopener">
             <Facebook fontSize="large" sx={{ margin: 1 }} />
           </Link>
@@ -35,7 +35,7 @@ const Contact = () => {
         </Box>
       </Box>
 
-      {/* Contact Form Section */}
+      
       <Box component="form" mt={4} noValidate autoComplete="off">
         <Typography variant="h5" component="h3" gutterBottom>
           Send us a message
@@ -58,7 +58,7 @@ const Contact = () => {
         </Box>
       </Box>
 
-      {/* Google Maps Section */}
+      
       <Box mt={5}>
         <Typography variant="h5" component="h3" gutterBottom>
           Visit Us

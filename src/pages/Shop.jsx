@@ -1,7 +1,7 @@
 // src/pages/Shop.js
 import React, { useState } from 'react';
 import { TextField, Button, Card, CardContent, Typography, Grid } from '@mui/material';
-import '../Css/shop.css'; // Optional: You can create this file for custom styling
+import '../Css/shop.css'; 
 
 const categories = ["Electronics", "Clothing", "Books", "Home Appliances"];
 
