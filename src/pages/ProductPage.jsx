@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
+import { getProducts } from '../api/apiService';
 
 const products = [
   {

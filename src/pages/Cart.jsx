@@ -1,15 +1,19 @@
-// src/pages/Cart.js
-import React, { useState } from "react";
+import React from "react";
 import "../Css/Cart.css";
 import { Button, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { toast } from "react-toastify";
 
-const Cart = () => {
-  const [cartItems, setCartItems] = useState([]);
-
+const Cart = ({ cartItems, setCartItems }) => {
   const handleRemoveItem = (id) => {
     const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
+    setCartItems(updatedCart);  
+  };
+
+  const handleBuyNow = ()=>{
+    toast.success("Order placed successfully!");
+
+    setCartItems([]);
   };
 
   return (
@@ -17,7 +21,7 @@ const Cart = () => {
       <h2>Shopping Cart</h2>
 
       <div className="cart-header">
-        <div className="header-item">Product</div>
+        <div className="header-item-title">Product</div>
         <div className="header-item">Price</div>
         <div className="header-item">Quantity</div>
         <div className="header-item">Subtotal</div>
@@ -26,7 +30,7 @@ const Cart = () => {
       {cartItems.length > 0 ? (
         cartItems.map((item) => (
           <div className="cart-row" key={item.id}>
-            <div className="cart-item">
+            <div className="cart-item-title" >
               <IconButton
                 onClick={() => handleRemoveItem(item.id)}
                 color="error"
@@ -35,10 +39,10 @@ const Cart = () => {
               </IconButton>
               <img
                 src={item.imageUrl}
-                alt={item.productName}
+                alt={item.name}
                 className="cart-image"
               />
-              <span>{item.productName}</span>
+              <span>{item.name}</span>
             </div>
             <div className="cart-item">${item.price.toFixed(2)}</div>
             <div className="cart-item">{item.quantity}</div>
@@ -51,8 +55,9 @@ const Cart = () => {
 
       {cartItems.length > 0 && (
         <div className="cart-actions">
-          <Button variant="contained" color="primary">
-            Proceed to Checkout
+          <Button variant="contained" color="primary" onClick={()=>{
+            handleBuyNow()}} >
+            Buy Now
           </Button>
         </div>
       )}

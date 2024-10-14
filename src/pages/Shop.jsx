@@ -1,34 +1,81 @@
-// src/pages/Shop.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Card, CardContent, Typography, Grid } from '@mui/material';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 import '../Css/shop.css'; 
+import { getProducts } from '../api/apiService'; // Assume you already have this API service function
+import { getCategories } from '../api/categoryService'; // Add this API call for fetching categories
 
-const categories = ["Electronics", "Clothing", "Books", "Home Appliances"];
-
-const products = [
-  { id: 1, name: "Smartphone", price: "$599", category: "Electronics", imageUrl: "https://via.placeholder.com/150" },
-  { id: 2, name: "T-Shirt", price: "$19", category: "Clothing", imageUrl: "https://via.placeholder.com/150" },
-  { id: 3, name: "Novel", price: "$9.99", category: "Books", imageUrl: "https://via.placeholder.com/150" },
-  { id: 4, name: "Microwave", price: "$99", category: "Home Appliances", imageUrl: "https://via.placeholder.com/150" },
-];
-
-const Shop = () => {
+const Shop = ({ handleAddToCart }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCategory, setFilteredCategory] = useState('');
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]); // State for categories
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [loadingCategories, setLoadingCategories] = useState(true); // State for loading categories
+  const [errorProducts, setErrorProducts] = useState(null);
+  const [errorCategories, setErrorCategories] = useState(null); // State for error in fetching categories
 
-  const handleSearch = (e) => {   
+  // Fetch products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await getProducts();
+        setProducts(data);
+        setLoadingProducts(false);
+      } catch (error) {
+        setErrorProducts('Failed to fetch products');
+        setLoadingProducts(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  // Fetch categories from the backend API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories(); // Call the API function to get categories
+        setCategories(data); // Set fetched categories
+        setLoadingCategories(false);
+      } catch (error) {
+        setErrorCategories('Failed to fetch categories');
+        setLoadingCategories(false);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
   const handleCategoryClick = (category) => {
-    setFilteredCategory(category);
+    setFilteredCategory(category.categoryId); // Filter by categoryId now
   };
 
+  const handleBuyNow = (productName) => {
+    toast.success(`Order placed for ${productName}!`);
+  };
+
+  // Filter products based on search and selected category
   const filteredProducts = products.filter(
     (product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filteredCategory ? product.category === filteredCategory : true)
+      product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      (filteredCategory ? product.categoryId === filteredCategory : true)
   );
+
+  if (loadingProducts || loadingCategories) {
+    return <div>Loading...</div>; // Show loading while fetching data
+  }
+
+  if (errorProducts) {
+    return <div>{errorProducts}</div>; // Show error message if fetching products fails
+  }
+
+  if (errorCategories) {
+    return <div>{errorCategories}</div>; // Show error message if fetching categories fails
+  }
 
   return (
     <div className="shop-container">
@@ -46,13 +93,13 @@ const Shop = () => {
           <h3>Categories</h3>
           {categories.map((category) => (
             <Button
-              key={category}
+              key={category.categoryId}
               fullWidth
               variant="outlined"
               onClick={() => handleCategoryClick(category)}
               style={{ marginBottom: '8px' }}
             >
-              {category}
+              {category.categoryName} {/* Show category name from API */}
             </Button>
           ))}
         </div>
@@ -61,12 +108,31 @@ const Shop = () => {
       <div className="product-list">
         <Grid container spacing={2}>
           {filteredProducts.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
+            <Grid item xs={12} sm={6} md={4} key={product.productId}>
               <Card>
-                <img src={product.imageUrl} alt={product.name} style={{ height: '150px', objectFit: 'cover' }} />
+                <img src="https://via.placeholder.com/150" alt={product.productName} style={{ height: '150px', objectFit: 'cover' }} />
                 <CardContent>
-                  <Typography variant="h6">{product.name}</Typography>
-                  <Typography variant="body1">{product.price}</Typography>
+                  <Typography variant="h6">{product.productName}</Typography>
+                  <Typography variant="body1">${product.price}</Typography>
+                  
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    fullWidth
+                    style={{ marginBottom: '8px' }}
+                    onClick={() => handleAddToCart(product)} 
+                  >
+                    Add to Cart
+                  </Button>
+                  
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    onClick={() => handleBuyNow(product.productName)}
+                  >
+                    Buy Now
+                  </Button>
                 </CardContent>
               </Card>
             </Grid>
