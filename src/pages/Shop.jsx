@@ -1,22 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Card, CardContent, Typography, Grid } from '@mui/material';
+import { TextField, Button, Card, CardContent, Typography, Grid, Pagination } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; 
 import '../Css/shop.css'; 
-import { getProducts } from '../api/apiService'; // Assume you already have this API service function
-import { getCategories } from '../api/categoryService'; // Add this API call for fetching categories
+import { getProducts } from '../api/apiService'; 
+import { getCategories } from '../api/categoryService'; 
+import { addToCart } from '../api/cartService';
 
-const Shop = ({ handleAddToCart }) => {
+const handleAddToCart = async(cartData) => {
+  const res = await addToCart(cartData);
+
+  if(res.status !== 200){
+    toast.error("Error adding to cart!");
+    return;
+  }
+
+  toast.success("Added to cart!");
+};
+
+const Shop = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCategory, setFilteredCategory] = useState('');
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]); // State for categories
+  const [categories, setCategories] = useState([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
-  const [loadingCategories, setLoadingCategories] = useState(true); // State for loading categories
+  const [loadingCategories, setLoadingCategories] = useState(true); 
   const [errorProducts, setErrorProducts] = useState(null);
-  const [errorCategories, setErrorCategories] = useState(null); // State for error in fetching categories
+  const [errorCategories, setErrorCategories] = useState(null); 
 
-  // Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -31,12 +42,11 @@ const Shop = ({ handleAddToCart }) => {
     fetchProducts();
   }, []);
 
-  // Fetch categories from the backend API
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const data = await getCategories(); // Call the API function to get categories
-        setCategories(data); // Set fetched categories
+        const data = await getCategories(); 
+        setCategories(data); 
         setLoadingCategories(false);
       } catch (error) {
         setErrorCategories('Failed to fetch categories');
@@ -51,14 +61,13 @@ const Shop = ({ handleAddToCart }) => {
   };
 
   const handleCategoryClick = (category) => {
-    setFilteredCategory(category.categoryId); // Filter by categoryId now
+    setFilteredCategory(category.categoryId);
   };
 
   const handleBuyNow = (productName) => {
     toast.success(`Order placed for ${productName}!`);
   };
 
-  // Filter products based on search and selected category
   const filteredProducts = products.filter(
     (product) =>
       product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -66,15 +75,15 @@ const Shop = ({ handleAddToCart }) => {
   );
 
   if (loadingProducts || loadingCategories) {
-    return <div>Loading...</div>; // Show loading while fetching data
+    return <div>Loading...</div>; 
   }
 
   if (errorProducts) {
-    return <div>{errorProducts}</div>; // Show error message if fetching products fails
+    return <div>{errorProducts}</div>; 
   }
 
   if (errorCategories) {
-    return <div>{errorCategories}</div>; // Show error message if fetching categories fails
+    return <div>{errorCategories}</div>; 
   }
 
   return (
@@ -99,7 +108,7 @@ const Shop = ({ handleAddToCart }) => {
               onClick={() => handleCategoryClick(category)}
               style={{ marginBottom: '8px' }}
             >
-              {category.categoryName} {/* Show category name from API */}
+              {category.categoryName}
             </Button>
           ))}
         </div>
@@ -120,7 +129,11 @@ const Shop = ({ handleAddToCart }) => {
                     color="secondary"
                     fullWidth
                     style={{ marginBottom: '8px' }}
-                    onClick={() => handleAddToCart(product)} 
+                    onClick={() => {handleAddToCart({
+                                productId: product.productId,
+                                userId: 32,
+                                quantity: 1,
+                              })}}
                   >
                     Add to Cart
                   </Button>
@@ -138,6 +151,7 @@ const Shop = ({ handleAddToCart }) => {
             </Grid>
           ))}
         </Grid>
+      <Pagination count={10}/>
       </div>
     </div>
   );

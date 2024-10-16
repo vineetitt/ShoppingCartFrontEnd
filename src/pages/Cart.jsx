@@ -1,13 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../Css/Cart.css";
 import { Button, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
+import { getCart, deleteCartItem } from "../api/cartService";
 
-const Cart = ({ cartItems, setCartItems }) => {
-  const handleRemoveItem = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);  
+
+const Cart = () => {
+  const [cartItems, setCartItems] = useState([]);
+
+  useEffect(() =>{
+    const getData = async() =>{
+    const cartData = await getCart(32); //TODO UserId Dynamic
+    setCartItems(cartData)
+    }
+    getData()
+  },[])
+
+  const handleRemoveItem = async (cartItemId) => {
+    try {
+      // Call the API to delete the item from the backend
+      await deleteCartItem(cartItemId);
+
+      // After deletion, update the UI state by filtering the removed item out
+      const updatedCart = cartItems.filter((item) => item.cartItemId !== cartItemId);
+      setCartItems(updatedCart); // Update state to reflect removed item
+
+      toast.success("Item removed successfully.");
+    } catch (error) {
+      console.error("Failed to delete cart item:", error);
+      toast.error("Failed to delete item.");
+    }
   };
 
   const handleBuyNow = ()=>{
@@ -15,7 +38,6 @@ const Cart = ({ cartItems, setCartItems }) => {
 
     setCartItems([]);
   };
-
   return (
     <div className="cart-container">
       <h2>Shopping Cart</h2>
@@ -29,10 +51,10 @@ const Cart = ({ cartItems, setCartItems }) => {
 
       {cartItems.length > 0 ? (
         cartItems.map((item) => (
-          <div className="cart-row" key={item.id}>
+          <div className="cart-row" key={item.cartItemId}>
             <div className="cart-item-title" >
               <IconButton
-                onClick={() => handleRemoveItem(item.id)}
+                onClick={() => handleRemoveItem(item.cartItemId)}
                 color="error"
               >
                 <DeleteIcon />
@@ -42,11 +64,11 @@ const Cart = ({ cartItems, setCartItems }) => {
                 alt={item.name}
                 className="cart-image"
               />
-              <span>{item.name}</span>
+              <span>{item.product.productName}</span>
             </div>
-            <div className="cart-item">${item.price.toFixed(2)}</div>
+            <div className="cart-item">${item.product.price.toFixed(2)}</div>
             <div className="cart-item">{item.quantity}</div>
-            <div className="cart-item">${item.subtotal.toFixed(2)}</div>
+            <div className="cart-item">${item.totalAmount.toFixed(2)}</div>
           </div>
         ))
       ) : (

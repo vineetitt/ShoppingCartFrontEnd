@@ -10,26 +10,9 @@ import Footer from './components/Footer';
 import ProductPage from './pages/ProductPage';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { addToCart } from './api/cartService';
 
 function App() {
-  const [cartItems, setCartItems] = useState([]);
-
-  const handleAddToCart = (product) => {
-    const existingItem = cartItems.find(item => item.id === product.id);
-
-    if (existingItem) {
-      setCartItems(cartItems.map(item =>
-        item.id === product.id
-          ? { ...item, quantity: item.quantity + 1, subtotal: (item.quantity + 1) * item.price }
-          : item
-      ));
-    } else {
-      setCartItems([...cartItems, { ...product, quantity: 1, subtotal: product.price }]);
-    }
-
-    toast.success("Added to cart!");
-  };
-
   return (
     <div className="app-container">
       <Router>
@@ -38,9 +21,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
-            <Route path="/shop" element={<Shop handleAddToCart={handleAddToCart} />} />
+            <Route path="/shop" element={<Shop />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/cart" element={<Cart cartItems={cartItems} setCartItems={setCartItems}/>} />
+            <Route path="/cart" element={<Cart />} />
             <Route path="/product/:productId" element={<ProductPage />} />
           </Routes>
         </div>
