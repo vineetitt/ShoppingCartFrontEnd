@@ -8,7 +8,7 @@ import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import Footer from './components/Footer';
 import ProductPage from './pages/ProductPage';
-import { ToastContainer, toast } from 'react-toastify';
+import { Bounce, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { addToCart } from './api/cartService';
 
@@ -29,7 +29,19 @@ function App() {
         </div>
         <Footer />
       </Router>
-      <ToastContainer />
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="light"
+        transition= {Bounce}
+        />
     </div>
   );
 }

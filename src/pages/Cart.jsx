@@ -11,7 +11,7 @@ const Cart = () => {
 
   useEffect(() =>{
     const getData = async() =>{
-    const cartData = await getCart(32); //TODO UserId Dynamic
+    const cartData = await getCart(32); 
     setCartItems(cartData)
     }
     getData()
@@ -19,12 +19,12 @@ const Cart = () => {
 
   const handleRemoveItem = async (cartItemId) => {
     try {
-      // Call the API to delete the item from the backend
+      
       await deleteCartItem(cartItemId);
 
-      // After deletion, update the UI state by filtering the removed item out
+      
       const updatedCart = cartItems.filter((item) => item.cartItemId !== cartItemId);
-      setCartItems(updatedCart); // Update state to reflect removed item
+      setCartItems(updatedCart); 
 
       toast.success("Item removed successfully.");
     } catch (error) {
@@ -60,7 +60,7 @@ const Cart = () => {
                 <DeleteIcon />
               </IconButton>
               <img
-                src={item.imageUrl}
+                src={item.product.imageUrl}
                 alt={item.name}
                 className="cart-image"
               />

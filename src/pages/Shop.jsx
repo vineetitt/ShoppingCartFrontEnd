@@ -27,20 +27,23 @@ const Shop = () => {
   const [loadingCategories, setLoadingCategories] = useState(true); 
   const [errorProducts, setErrorProducts] = useState(null);
   const [errorCategories, setErrorCategories] = useState(null); 
+  const [pageNumber, setPageNumber] = useState(1);  // Track current page
+  const [maxPage, setMaxPage] = useState(1);  // Track maximum pages
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getProducts();
-        setProducts(data);
-        setLoadingProducts(false);
+        const response = await getProducts(filteredCategory, pageNumber, 6);
+          setProducts(response.data);
+          setMaxPage(response.maxPage);
+          setLoadingProducts(false);
       } catch (error) {
-        setErrorProducts('Failed to fetch products');
+        setErrorProducts("Failed to fetch products");
         setLoadingProducts(false);
       }
     };
     fetchProducts();
-  }, []);
+  }, [pageNumber, searchTerm , filteredCategory]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -68,11 +71,9 @@ const Shop = () => {
     toast.success(`Order placed for ${productName}!`);
   };
 
-  const filteredProducts = products.filter(
-    (product) =>
-      product.productName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filteredCategory ? product.categoryId === filteredCategory : true)
-  );
+  const handlePageChange = (event, value) => {
+    setPageNumber(value);  // Update page number when pagination is clicked
+  };
 
   if (loadingProducts || loadingCategories) {
     return <div>Loading...</div>; 
@@ -89,18 +90,19 @@ const Shop = () => {
   return (
     <div className="shop-container">
       <div className="sidebar">
-        <TextField
-          label="Search Products"
-          variant="outlined"
-          size="small"
-          fullWidth
-          value={searchTerm}
-          onChange={handleSearch}
-        />
+       
         
         <div className="categories">
           <h3>Categories</h3>
-          {categories.map((category) => (
+          <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => setFilteredCategory("")}
+              style={{ marginBottom: '8px' }}
+            >
+              All Products
+            </Button>
+          {categories.filter(c=>c.categoryId!==4).map((category) => (
             <Button
               key={category.categoryId}
               fullWidth
@@ -116,10 +118,14 @@ const Shop = () => {
 
       <div className="product-list">
         <Grid container spacing={2}>
-          {filteredProducts.map((product) => (
+          {products.map((product) => (
+            
             <Grid item xs={12} sm={6} md={4} key={product.productId}>
               <Card>
-                <img src="https://via.placeholder.com/150" alt={product.productName} style={{ height: '150px', objectFit: 'cover' }} />
+                <div style={{display: "flex", justifyContent:"center", alignItems:"center"}}>
+
+                <img src={product.imageUrl} alt={product.productName} style={{height:"250px", objectFit: 'cover' }} />
+                </div>
                 <CardContent>
                   <Typography variant="h6">{product.productName}</Typography>
                   <Typography variant="body1">${product.price}</Typography>
@@ -151,7 +157,14 @@ const Shop = () => {
             </Grid>
           ))}
         </Grid>
-      <Pagination count={10}/>
+        <div style={{display: "flex", justifyContent:"center", alignItems:"center", marginTop:"20px"}}>
+        {/* Pagination */}
+        <Pagination 
+          count={maxPage}  // Set total page count
+          page={pageNumber}  // Set current page number
+          onChange={handlePageChange}  // Handle page change
+        />
+      </div>
       </div>
     </div>
   );

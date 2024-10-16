@@ -12,7 +12,7 @@ const ProductCard = ({ image, title, description, price, productId }) => {
 
   return (
     <div className="product-card">
-      <img src={image} alt={title} className="product-image" />
+      <img src={image} alt={title} className="product-image" style={{objectFit:"contain"}} />
       <h3 className="product-title">{title}</h3>
       <p className="product-description">{description}</p>
       <p className="product-price">{price}</p>
