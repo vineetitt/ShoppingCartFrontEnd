@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/HomePage';
@@ -8,9 +7,9 @@ import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import Footer from './components/Footer';
 import ProductPage from './pages/ProductPage';
-import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { addToCart } from './api/cartService';
+import OrderPage from './pages/Orders';
 
 function App() {
   return (
@@ -25,6 +24,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/product/:productId" element={<ProductPage />} />
+            <Route path="/order" element={<OrderPage userId={32} />} />
           </Routes>
         </div>
         <Footer />

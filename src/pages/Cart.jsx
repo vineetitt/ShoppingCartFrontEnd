@@ -4,7 +4,7 @@ import { Button, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { toast } from "react-toastify";
 import { getCart, deleteCartItem } from "../api/cartService";
-
+import { placeOrder } from "../api/orderService";
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);
@@ -32,12 +32,11 @@ const Cart = () => {
       toast.error("Failed to delete item.");
     }
   };
-
-  const handleBuyNow = ()=>{
-    toast.success("Order placed successfully!");
-
+  const handleBuyNow = async (userId) => {
+    await placeOrder(userId)
     setCartItems([]);
-  };
+    toast.success("Order placed successfully!");
+  }
   return (
     <div className="cart-container">
       <h2>Shopping Cart</h2>
@@ -78,7 +77,7 @@ const Cart = () => {
       {cartItems.length > 0 && (
         <div className="cart-actions">
           <Button variant="contained" color="primary" onClick={()=>{
-            handleBuyNow()}} >
+            handleBuyNow(32)}} >
             Buy Now
           </Button>
         </div>

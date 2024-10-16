@@ -6,6 +6,8 @@ import '../Css/shop.css';
 import { getProducts } from '../api/apiService'; 
 import { getCategories } from '../api/categoryService'; 
 import { addToCart } from '../api/cartService';
+import { placeOrder } from '../api/orderService';
+
 
 const handleAddToCart = async(cartData) => {
   const res = await addToCart(cartData);
@@ -18,6 +20,16 @@ const handleAddToCart = async(cartData) => {
   toast.success("Added to cart!");
 };
 
+const handelDirectBuy = async(productId) => {
+  await handleAddToCart({
+    productId: productId,
+    userId: 32,
+    quantity: 1,
+  });
+  await placeOrder(32);
+  toast.success("Order placed successfully!");
+}
+
 const Shop = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCategory, setFilteredCategory] = useState('');
@@ -27,8 +39,8 @@ const Shop = () => {
   const [loadingCategories, setLoadingCategories] = useState(true); 
   const [errorProducts, setErrorProducts] = useState(null);
   const [errorCategories, setErrorCategories] = useState(null); 
-  const [pageNumber, setPageNumber] = useState(1);  // Track current page
-  const [maxPage, setMaxPage] = useState(1);  // Track maximum pages
+  const [pageNumber, setPageNumber] = useState(1);  
+  const [maxPage, setMaxPage] = useState(1);  
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -59,20 +71,15 @@ const Shop = () => {
     fetchCategories();
   }, []);
 
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
 
   const handleCategoryClick = (category) => {
     setFilteredCategory(category.categoryId);
   };
 
-  const handleBuyNow = (productName) => {
-    toast.success(`Order placed for ${productName}!`);
-  };
+
 
   const handlePageChange = (event, value) => {
-    setPageNumber(value);  // Update page number when pagination is clicked
+    setPageNumber(value);  
   };
 
   if (loadingProducts || loadingCategories) {
@@ -101,7 +108,7 @@ const Shop = () => {
               style={{ marginBottom: '8px' }}
             >
               All Products
-            </Button>
+          </Button>
           {categories.filter(c=>c.categoryId!==4).map((category) => (
             <Button
               key={category.categoryId}
@@ -148,7 +155,7 @@ const Shop = () => {
                     variant="contained"
                     color="primary"
                     fullWidth
-                    onClick={() => handleBuyNow(product.productName)}
+                     onClick={() => {handelDirectBuy(product.productId)} }
                   >
                     Buy Now
                   </Button>
@@ -158,11 +165,11 @@ const Shop = () => {
           ))}
         </Grid>
         <div style={{display: "flex", justifyContent:"center", alignItems:"center", marginTop:"20px"}}>
-        {/* Pagination */}
+       
         <Pagination 
-          count={maxPage}  // Set total page count
-          page={pageNumber}  // Set current page number
-          onChange={handlePageChange}  // Handle page change
+          count={maxPage}  
+          page={pageNumber} 
+          onChange={handlePageChange} 
         />
       </div>
       </div>

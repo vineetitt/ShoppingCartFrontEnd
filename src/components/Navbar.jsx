@@ -38,6 +38,14 @@ const Navbar = () => {
               color: e.isActive===true? "#4169E1": ""
             }
           }} to="/cart">Cart</NavLink></li>
+
+
+          <li><NavLink style={(e)=>{
+            return{
+              color: e.isActive===true? "#4169E1": ""
+            }
+          }} to="/order">Orders</NavLink></li>
+
         </ul>
       </div>
     </nav>
