@@ -1,26 +1,4 @@
-import React from 'react';
-import { Button } from '@mui/material';
-import ProductCard from '../components/ProductCard'; 
-import '../Css/home.css'; 
-
-const Home = () => {
-  return (
-    <div>
-      <div className="home-container">
-        <div className="content">
-          <h1>Store</h1>
-          <Button  
-            color="success" 
-            size="large" 
-            href='./Shop' 
-            variant="contained"
-          >
-            Shop Now
-          </Button>
-        </div>
-      </div>
-
-      {/* <div className="product-section">
+{/* <div className="product-section">
         <h2></h2>
         <div className="products-container">
           <ProductCard 
@@ -49,6 +27,30 @@ const Home = () => {
           />
         </div>
       </div> */}
+
+import React from 'react';
+import { Button } from '@mui/material';
+import ProductCard from '../components/ProductCard'; 
+import '../Css/home.css'; 
+
+const Home = () => {
+  return (
+    <div>
+      <div className="home-container">
+        <div className="content">
+          <h1>Store</h1>
+          <Button  
+            color="success" 
+            size="large" 
+            href='./Shop' 
+            variant="contained"
+          >
+            Shop Now
+          </Button>
+        </div>
+      </div>
+
+      
 
       <div className="testimonial-section">
         <h2>What Our Customers Say</h2>

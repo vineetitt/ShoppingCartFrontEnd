@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/HomePage';
@@ -10,24 +11,66 @@ import ProductPage from './pages/ProductPage';
 import { Bounce, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import OrderPage from './pages/Orders';
+import Login from './pages/Login';
+import PrivateRoute from './components/PrivateRoute';
+import Logout from './pages/Logout';
+import NotFound from './pages/UnauthorizedPage';
+import Error from './pages/Error';
+import ErrorBoundary from './pages/ErrorBoundary';  
+import Signup from './pages/SignUp';
 
 function App() {
+  const id = localStorage.getItem('userId');
+  // const [isLoggedIn, setIsLoggedIn] = useState(id!== null);
+  
   return (
     <div className="app-container">
       <Router>
         <Navbar />
         <div className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/product/:productId" element={<ProductPage />} />
-            <Route path="/order" element={<OrderPage userId={32} />} />
-          </Routes>
+          <ErrorBoundary> 
+            <Routes>
+              <Route path="/" element={<Login />} />
+              <Route path="/home" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/product" element={<ProductPage />} />
+
+              
+              <Route
+                path="/cart"
+                element={
+                  <PrivateRoute>
+                    <Cart />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/order"
+                element={
+                  <PrivateRoute>
+                    <OrderPage userId={id} />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/shop"
+                element={
+                  <PrivateRoute>
+                    <Shop />
+                  </PrivateRoute>
+                }
+              />
+
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/logout" element={<Logout />} />
+              <Route path="*" element={<NotFound />} /> 
+              <Route path="/error" element={<Error />} />
+            </Routes>
+          </ErrorBoundary>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </Router>
       <ToastContainer
         position="top-center"
@@ -40,8 +83,8 @@ function App() {
         draggable
         pauseOnHover={false}
         theme="light"
-        transition= {Bounce}
-        />
+        transition={Bounce}
+      />
     </div>
   );
 }

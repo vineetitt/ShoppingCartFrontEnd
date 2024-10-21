@@ -7,11 +7,15 @@ import { getCart, deleteCartItem } from "../api/cartService";
 import { placeOrder } from "../api/orderService";
 
 const Cart = () => {
+
+  const id = localStorage.getItem('userId');
+  
+  
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() =>{
     const getData = async() =>{
-    const cartData = await getCart(32); 
+    const cartData = await getCart(id); 
     setCartItems(cartData)
     }
     getData()
@@ -77,7 +81,7 @@ const Cart = () => {
       {cartItems.length > 0 && (
         <div className="cart-actions">
           <Button variant="contained" color="primary" onClick={()=>{
-            handleBuyNow(32)}} >
+            handleBuyNow(id)}} >
             Buy Now
           </Button>
         </div>

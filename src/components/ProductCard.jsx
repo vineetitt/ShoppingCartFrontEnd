@@ -1,12 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';  // If you're using MUI button
+import { Button } from '@mui/material';  
 
 const ProductCard = ({ image, title, description, price, productId }) => {
   const navigate = useNavigate();
 
   const handleBuyNowClick = () => {
-    // Navigate to product detail page when the button is clicked
     navigate(`/product/${productId}`);
   };
 
@@ -17,7 +16,7 @@ const ProductCard = ({ image, title, description, price, productId }) => {
       <p className="product-description">{description}</p>
       <p className="product-price">{price}</p>
 
-      {/* Button that navigates to the product details page */}
+      
       <Button 
         variant="contained" 
         color="primary" 

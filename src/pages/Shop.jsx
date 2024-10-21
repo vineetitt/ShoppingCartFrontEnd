@@ -8,8 +8,9 @@ import { getCategories } from '../api/categoryService';
 import { addToCart } from '../api/cartService';
 import { placeOrder } from '../api/orderService';
 
-
+const id= localStorage.getItem('userId');
 const handleAddToCart = async(cartData) => {
+
   const res = await addToCart(cartData);
 
   if(res.status !== 200){
@@ -23,10 +24,10 @@ const handleAddToCart = async(cartData) => {
 const handelDirectBuy = async(productId) => {
   await handleAddToCart({
     productId: productId,
-    userId: 32,
+    userId: id,
     quantity: 1,
   });
-  await placeOrder(32);
+  await placeOrder(id);
   toast.success("Order placed successfully!");
 }
 
@@ -144,7 +145,7 @@ const Shop = () => {
                     style={{ marginBottom: '8px' }}
                     onClick={() => {handleAddToCart({
                                 productId: product.productId,
-                                userId: 32,
+                                userId: id,
                                 quantity: 1,
                               })}}
                   >

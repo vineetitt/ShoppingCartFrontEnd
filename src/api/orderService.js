@@ -1,11 +1,5 @@
 import axios from 'axios';
 
-
-
-
-
-
-
 export const placeOrder= async (userId) => {
     try {
         const response = await axios.post(`https://localhost:7178/api/Order/${userId}`);

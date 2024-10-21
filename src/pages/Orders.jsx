@@ -7,7 +7,7 @@ const OrderPage = ({ userId }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch orders when the component mounts
+  
   useEffect(() => {
     const fetchOrders = async () => {
       try {
