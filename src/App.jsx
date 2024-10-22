@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/HomePage';
@@ -21,12 +21,12 @@ import Signup from './pages/SignUp';
 
 function App() {
   const id = localStorage.getItem('userId');
-  // const [isLoggedIn, setIsLoggedIn] = useState(id!== null);
+  const [isLoggedIn, setIsLoggedIn] = useState(id!== null);
   
   return (
     <div className="app-container">
       <Router>
-        <Navbar />
+        <Navbar isLoggedIn={isLoggedIn}/>
         <div className="main-content">
           <ErrorBoundary> 
             <Routes>
@@ -34,7 +34,7 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/product" element={<ProductPage />} />
+              <Route path="/product/:productId" element={<ProductPage />} />
 
               
               <Route
@@ -61,10 +61,9 @@ function App() {
                   </PrivateRoute>
                 }
               />
-
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<Login setIsLoggedIn= {setIsLoggedIn} />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/logout" element={<Logout />} />
+              <Route path="/logout" element={<Logout setIsLoggedIn= {setIsLoggedIn} />} />
               <Route path="*" element={<NotFound />} /> 
               <Route path="/error" element={<Error />} />
             </Routes>

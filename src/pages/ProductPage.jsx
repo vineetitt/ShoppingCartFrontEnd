@@ -1,70 +1,92 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
-import { ToastContainer, toast } from 'react-toastify'; 
+import { toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'; 
 import { getProducts } from '../api/apiService';
+import {getProductById} from '../api/apiService';
+import { addToCart } from '../api/cartService';
+import { placeOrder } from '../api/orderService';
 
-const products = [
-  {
-    id: 1,
-    image: "https://via.placeholder.com/300x200",
-    title: "Product 1",
-    description: "This is a detailed description of Product 1.",
-    price: "$49.99"
-  },
-  {
-    id: 2,
-    image: "https://via.placeholder.com/300x200",
-    title: "Product 2",
-    description: "This is a detailed description of Product 2.",
-    price: "$69.99"
-  },
-  {
-    id: 3,
-    image: "https://via.placeholder.com/300x200",
-    title: "Product 3",
-    description: "This is a detailed description of Product 3.",
-    price: "$89.99"
+const id= localStorage.getItem('userId');
+const handleAddToCart = async(cartData) => {
+
+  const res = await addToCart(cartData);
+
+  if(res.status !== 200){
+    toast.error("Error adding to cart!");
+    return;
   }
-];
+
+  toast.success("Added to cart!");
+};
+
+const handelDirectBuy = async(productId) => {
+  await handleAddToCart({
+    productId: productId,
+    userId: id,
+    quantity: 1,
+  });
+  await placeOrder(id);
+  toast.success("Order placed successfully!");
+}
+
 
 const ProductPage = () => {
   const { productId } = useParams();
-  const product = products.find((p) => p.id === parseInt(productId));
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const response = await getProductById(productId); 
+        setProduct(response);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        if(error.response.status === 404){
+          toast.error(error.response.data);
+        }
+        else{
+          setError("Failed to fetch product details");
+        }
+        
+        
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [productId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   if (!product) {
     return <div>Product not found</div>;
   }
 
- 
-  const handleBuyNow = () => {
-   
-    toast.success('Order Placed Successfully!', {
-      position: "top-right",
-      autoClose: 3000, 
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
 
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-     
-      <ToastContainer />
 
       <Typography variant="h4" style={{ marginBottom: '20px', textAlign: 'center' }}>
-        {product.title}
+        {product.productName}
       </Typography>
 
       
       <div style={{ display: 'flex', gap: '20px', marginBottom: '30px' }}>
        
         <img 
-          src={product.image} 
+          src={product.imageUrl} 
           alt={product.title} 
           style={{ width: '300px', height: '200px', borderRadius: '10px' }} 
         />
@@ -80,20 +102,32 @@ const ProductPage = () => {
           </Typography>
 
           
-          <Button 
-            variant="contained" 
-            color="primary" 
-            style={{ marginTop: '20px' }} 
-            onClick={handleBuyNow}
-          >
-            Confirm Buy
-          </Button>
+          <Button
+                    variant="outlined"
+                    color="secondary"
+                    fullWidth
+                    style={{ marginBottom: '8px' }}
+                    onClick={() => {handleAddToCart({
+                                productId: product.productId,
+                                userId: id,
+                                quantity: 1,
+                              })}}
+                  >
+                    Add to Cart
+                  </Button>
+                  
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                     onClick={() => {handelDirectBuy(product.productId)} }
+                  >
+                    Buy Now
+                  </Button>
         </div>
       </div>
-
-      
       <div style={{ textAlign: 'center', marginTop: '20px' }}>
-        <Button variant="outlined" color="secondary" href="/">
+        <Button variant="outlined" color="secondary" onClick={()=>{navigate(-1)}}>
           Go Back to Home
         </Button>
       </div>

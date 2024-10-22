@@ -19,3 +19,15 @@ export const getProducts = async (categoryId, pageNumber = 1, pageSize = 6) => {
   }
 };
 
+
+export const getProductById = async (productId)=>{
+  try{
+    const response = await axios.get(`${API_URL}/Product/${productId}`);
+    return response.data;
+  }
+  catch(error){
+    console.error("Error fetching product by id", error);
+    throw error;
+  }
+}
+

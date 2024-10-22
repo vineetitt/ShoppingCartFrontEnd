@@ -3,11 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { colors } from "@mui/material";
 
-const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("userId")!== null);
-  useEffect(() => {
-    setIsLoggedIn(localStorage.getItem("userId")!== null);
-  }, [localStorage]);
+const Navbar = ({isLoggedIn}) => {
   return (
     <nav className="navbar">
       <div className="navbar-left">

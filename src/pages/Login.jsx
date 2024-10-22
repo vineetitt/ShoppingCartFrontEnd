@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { Button, TextField, Container, Typography, Box, Grid, Paper } from '@mui/material';
 import { handleLogin } from '../api/LoginService';
 
-const Login = () => {
+const Login = ({setIsLoggedIn}) => {
   const [Username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -17,11 +17,13 @@ const Login = () => {
         var {token, userId}= response;
         localStorage.setItem('token', token);
         localStorage.setItem('userId', userId);
+        setIsLoggedIn(true);
         toast.success('Login successful!');
         navigate('/Home');
-     }
-     catch(error)
-     {
+      }
+      catch(error)
+      {
+        setIsLoggedIn(false);
         toast.error('Invalid email or password!');
      }
 
@@ -69,6 +71,7 @@ const Login = () => {
               type="submit"
               fullWidth
               variant="contained"
+              disabled= {!Username || !password}
               sx={{ mt: 2, mb: 2 }}
             >
               Login
