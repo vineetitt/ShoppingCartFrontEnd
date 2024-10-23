@@ -11,10 +11,12 @@ export default [
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      parser: babelParser,
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
+        requireConfigFile: false, // add this to avoid Babel needing a config file
       },
     },
     settings: { react: { version: '18.3' } },

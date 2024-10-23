@@ -4,29 +4,45 @@ import { toast } from 'react-toastify';
 import { Button, TextField, Container, Typography, Box, Grid, Paper } from '@mui/material';
 import { handleLogin } from '../api/LoginService';
 
-const Login = ({setIsLoggedIn}) => {
+const Login = ({ setIsLoggedIn }) => {
   const [Username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
+  const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
   const navigate = useNavigate();
 
   const handleLoginForm = async (e) => {
     e.preventDefault();
-     try
-     {
-        const response = await handleLogin(Username, password);
-        var {token, userId}= response;
-        localStorage.setItem('token', token);
-        localStorage.setItem('userId', userId);
-        setIsLoggedIn(true);
-        toast.success('Login successful!');
-        navigate('/Home');
-      }
-      catch(error)
-      {
-        setIsLoggedIn(false);
-        toast.error('Invalid email or password!');
-     }
+    try {
+      const response = await handleLogin(Username, password);
+      const { token, userId } = response;
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+      setIsLoggedIn(true);
+      toast.success('Login successful!');
+      navigate('/Home');
+    } catch (error) {
+      setIsLoggedIn(false);
+      toast.error('Invalid username or password!');
 
+      
+      setIsUsernameInvalid(true);
+      setIsPasswordInvalid(true);
+    }
+  };
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    if (isUsernameInvalid) {
+      setIsUsernameInvalid(false); 
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (isPasswordInvalid) {
+      setIsPasswordInvalid(false); 
+    }
   };
 
   return (
@@ -53,7 +69,10 @@ const Login = ({setIsLoggedIn}) => {
               autoComplete="Username"
               autoFocus
               value={Username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={handleUsernameChange}
+              error={isUsernameInvalid} 
+              helperText={isUsernameInvalid ? 'Invalid username' : ''}
+              sx={{ '& .MuiOutlinedInput-root.Mui-error': { borderColor: 'red' } }}
             />
             <TextField
               margin="normal"
@@ -65,18 +84,20 @@ const Login = ({setIsLoggedIn}) => {
               id="password"
               autoComplete="current-password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
+              error={isPasswordInvalid} 
+              helperText={isPasswordInvalid ? 'Invalid password' : ''}
+              sx={{ '& .MuiOutlinedInput-root.Mui-error': { borderColor: 'red' } }}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              disabled= {!Username || !password}
+              disabled={!Username || !password}
               sx={{ mt: 2, mb: 2 }}
             >
               Login
             </Button>
-
 
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -93,4 +114,3 @@ const Login = ({setIsLoggedIn}) => {
 };
 
 export default Login;
-

@@ -18,6 +18,7 @@ import NotFound from './pages/UnauthorizedPage';
 import Error from './pages/Error';
 import ErrorBoundary from './pages/ErrorBoundary';  
 import Signup from './pages/SignUp';
+import AddressForm from './pages/AddressForm';
 
 function App() {
   const id = localStorage.getItem('userId');
@@ -30,12 +31,12 @@ function App() {
         <div className="main-content">
           <ErrorBoundary> 
             <Routes>
+
               <Route path="/" element={<Login />} />
               <Route path="/home" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/product/:productId" element={<ProductPage />} />
-
               
               <Route
                 path="/cart"
@@ -61,6 +62,16 @@ function App() {
                   </PrivateRoute>
                 }
               />
+
+              <Route
+                path="/address"
+                element={
+                  <PrivateRoute>
+                    <AddressForm />
+                  </PrivateRoute>
+                }
+              />
+
               <Route path="/login" element={<Login setIsLoggedIn= {setIsLoggedIn} />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/logout" element={<Logout setIsLoggedIn= {setIsLoggedIn} />} />

@@ -7,6 +7,7 @@ import { getProducts } from '../api/apiService';
 import {getProductById} from '../api/apiService';
 import { addToCart } from '../api/cartService';
 import { placeOrder } from '../api/orderService';
+import AddressForm from './AddressForm';
 
 const id= localStorage.getItem('userId');
 const handleAddToCart = async(cartData) => {
@@ -21,14 +22,17 @@ const handleAddToCart = async(cartData) => {
   toast.success("Added to cart!");
 };
 
-const handelDirectBuy = async(productId) => {
-  await handleAddToCart({
+const handelDirectBuy = async(productId, navigate) => {
+  const addedToCart = await handleAddToCart({
     productId: productId,
     userId: id,
     quantity: 1,
   });
-  await placeOrder(id);
-  toast.success("Order placed successfully!");
+  console.log("hii");
+  navigate('/address');
+ 
+  // await placeOrder(id);
+  // toast.success("Order placed successfully!");
 }
 
 
@@ -38,7 +42,7 @@ const ProductPage = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -120,7 +124,7 @@ const ProductPage = () => {
                     variant="contained"
                     color="primary"
                     fullWidth
-                     onClick={() => {handelDirectBuy(product.productId)} }
+                     onClick={() => {handelDirectBuy(product.productId, navigate)} }
                   >
                     Buy Now
                   </Button>

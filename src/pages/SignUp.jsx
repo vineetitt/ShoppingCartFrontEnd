@@ -10,15 +10,21 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); 
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
+  const [isEmailInvalid, setIsEmailInvalid] = useState(false);
+  const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
+  const [isConfirmPasswordInvalid, setIsConfirmPasswordInvalid] = useState(false);
+  const [passwordsDoNotMatch, setPasswordsDoNotMatch] = useState(false);
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {
     e.preventDefault();
 
+    
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match!');
+      setPasswordsDoNotMatch(true); 
       return;
     }
 
@@ -40,6 +46,11 @@ const Signup = () => {
       } else {
         toast.error(error.response.data);
       }
+
+      setIsUsernameInvalid(true);
+      setIsEmailInvalid(true);
+      setIsPasswordInvalid(true);
+      setIsConfirmPasswordInvalid(true);
     }
   };
 
@@ -49,6 +60,32 @@ const Signup = () => {
 
   const toggleConfirmPasswordVisibility = () => {
     setShowConfirmPassword((prevState) => !prevState);
+  };
+
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    if (isUsernameInvalid) setIsUsernameInvalid(false);
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (isEmailInvalid) setIsEmailInvalid(false);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (passwordsDoNotMatch || isPasswordInvalid) {
+      setPasswordsDoNotMatch(false); 
+      setIsPasswordInvalid(false);
+    }
+  };
+
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+    if (passwordsDoNotMatch || isConfirmPasswordInvalid) {
+      setPasswordsDoNotMatch(false); 
+      setIsConfirmPasswordInvalid(false);
+    }
   };
 
   return (
@@ -69,7 +106,10 @@ const Signup = () => {
               autoComplete="off"
               autoFocus
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={handleUsernameChange}
+              error={isUsernameInvalid}
+              helperText={isUsernameInvalid ? 'Invalid username' : ''}
+              sx={{ '& .MuiOutlinedInput-root.Mui-error': { borderColor: 'red' } }}
             />
             <TextField
               margin="normal"
@@ -80,7 +120,10 @@ const Signup = () => {
               name="email"
               autoComplete="off"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
+              error={isEmailInvalid}
+              helperText={isEmailInvalid ? 'Invalid email' : ''}
+              sx={{ '& .MuiOutlinedInput-root.Mui-error': { borderColor: 'red' } }}
             />
             <TextField
               margin="normal"
@@ -88,11 +131,13 @@ const Signup = () => {
               fullWidth
               name="password"
               label="Password"
-              type={showPassword ? 'text' : 'password'} 
+              type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="new-password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
+              error={isPasswordInvalid}
+              helperText={isPasswordInvalid ? 'Invalid password' : ''}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -102,6 +147,7 @@ const Signup = () => {
                   </InputAdornment>
                 ),
               }}
+              sx={{ '& .MuiOutlinedInput-root.Mui-error': { borderColor: 'red' } }}
             />
             <TextField
               margin="normal"
@@ -109,11 +155,13 @@ const Signup = () => {
               fullWidth
               name="confirmPassword"
               label="Confirm Password"
-              type={showConfirmPassword ? 'text' : 'password'} 
+              type={showConfirmPassword ? 'text' : 'password'}
               id="confirmPassword"
-              autoComplete="new-password" 
+              autoComplete="new-password"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={handleConfirmPasswordChange}
+              error={passwordsDoNotMatch || isConfirmPasswordInvalid}
+              helperText={passwordsDoNotMatch ? 'Passwords do not match' : ''}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -123,13 +171,15 @@ const Signup = () => {
                   </InputAdornment>
                 ),
               }}
+              sx={{ '& .MuiOutlinedInput-root.Mui-error': { borderColor: 'red' } }}
             />
-            <Button 
-            type="submit" 
-            fullWidth
-            variant="contained" 
-            disabled={!password || !email ||  !username|| !confirmPassword || password!== confirmPassword}  
-            sx={{ mt: 2, mb: 2 }}>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 2, mb: 2 }}
+              disabled={!password || !email || !username || !confirmPassword}
+            >
               Sign Up
             </Button>
           </Box>
