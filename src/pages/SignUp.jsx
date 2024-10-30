@@ -25,6 +25,7 @@ const Signup = () => {
     
     if (password !== confirmPassword) {
       setPasswordsDoNotMatch(true); 
+      toast.error("Passwords do not match");
       return;
     }
 
@@ -38,19 +39,31 @@ const Signup = () => {
       }
     } catch (error) {
       if (error.status === 400) {
+        
         const jsonError = error.response.data;
         if (jsonError.errors == null) toast.error(jsonError.toString());
-        for (const err in jsonError.errors) {
-          toast.error(jsonError.errors[err][0]);
+        if(typeof(jsonError)==="string"){
+          setIsUsernameInvalid(true);
+        }
+        else{
+
+          for (const err in jsonError.errors) {
+            jsonError.errors[err].map((i)=>{
+              toast.error(i)
+            });
+            if(err.includes("Email")){
+              setIsEmailInvalid(true)
+            }
+            else if(err.includes("Pass")){
+              setIsPasswordInvalid(true)
+              setIsConfirmPasswordInvalid(true);
+            }
+          }
         }
       } else {
         toast.error(error.response.data);
       }
 
-      setIsUsernameInvalid(true);
-      setIsEmailInvalid(true);
-      setIsPasswordInvalid(true);
-      setIsConfirmPasswordInvalid(true);
     }
   };
 
@@ -86,6 +99,7 @@ const Signup = () => {
       setPasswordsDoNotMatch(false); 
       setIsConfirmPasswordInvalid(false);
     }
+    
   };
 
   return (

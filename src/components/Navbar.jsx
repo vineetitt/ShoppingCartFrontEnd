@@ -54,18 +54,6 @@ const Navbar = ({isLoggedIn}) => {
                   color: e.isActive === true ? "#4169E1" : "",
                 };
               }}
-              to="/contact"
-            >
-              Contact
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              style={(e) => {
-                return {
-                  color: e.isActive === true ? "#4169E1" : "",
-                };
-              }}
               to="/cart"
             >
               Cart
@@ -84,7 +72,19 @@ const Navbar = ({isLoggedIn}) => {
               Orders
             </NavLink>
           </li>
-
+          <li>
+            <NavLink
+              style={(e) => {
+                return {
+                  color: e.isActive === true ? "#4169E1" : "",
+                };
+              }}
+              to="/contact"
+            >
+              Contact
+            </NavLink>
+          </li>
+          
           {isLoggedIn ? (
             <li>
               <NavLink

@@ -35,9 +35,9 @@ function App() {
               <Route path="/" element={<Login />} />
               <Route path="/home" element={<Home />} />
               <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
               <Route path="/product/:productId" element={<ProductPage />} />
-              
+              <Route path="/order" element={<OrderPage userId = {id}/>} />
+              <Route path="/contact" element={<Contact />} />
               <Route
                 path="/cart"
                 element={
@@ -84,17 +84,17 @@ function App() {
       </Router>
       <ToastContainer
         position="top-center"
-        autoClose={2000}
+        autoClose={3000}
         hideProgressBar={false}
         newestOnTop
         closeOnClick
         rtl={false}
-        pauseOnFocusLoss={false}
+        pauseOnFocusLoss
         draggable
         pauseOnHover={false}
         theme="light"
-        transition={Bounce}
-      />
+        transition= {Bounce}
+        />
     </div>
   );
 }

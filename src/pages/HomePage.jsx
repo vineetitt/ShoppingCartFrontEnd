@@ -1,33 +1,3 @@
-{/* <div className="product-section">
-        <h2></h2>
-        <div className="products-container">
-          <ProductCard 
-            
-            image="https://m.media-amazon.com/images/I/71xuYczfLBL._AC_UL320_.jpg" 
-            title="Product 1" 
-            description="This is a short description of the product. It highlights key features." 
-            price="$49.99" 
-            productId={1}  
-          />
-          
-          <ProductCard 
-            image="https://m.media-amazon.com/images/I/51zzUcG6EKL._SX569_.jpg" 
-            title="Product 2" 
-            description="This is a short description of the product. It highlights key features." 
-            price="$69.99" 
-            productId={2}  
-          />
-
-          <ProductCard 
-            image="https://m.media-amazon.com/images/I/314WspGErEL._SX300_SY300_QL70_FMwebp_.jpg" 
-            title="Product 3" 
-            description="This is a short description of the product. It highlights key features." 
-            price="$89.99" 
-            productId={3}  
-          />
-        </div>
-      </div> */}
-
 import React from 'react';
 import { Button } from '@mui/material';
 import ProductCard from '../components/ProductCard'; 
@@ -49,8 +19,6 @@ const Home = () => {
           </Button>
         </div>
       </div>
-
-      
 
       <div className="testimonial-section">
         <h2>What Our Customers Say</h2>

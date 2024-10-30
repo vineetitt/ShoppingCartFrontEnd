@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, TextField, Container, Typography, Box, Grid, Paper } from '@mui/material';
+import { Button, TextField, Container, Typography, Box, Grid, Paper, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { handleLogin } from '../api/LoginService';
 
 const Login = ({ setIsLoggedIn }) => {
   const [Username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); 
   const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
   const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
   const navigate = useNavigate();
@@ -23,26 +25,37 @@ const Login = ({ setIsLoggedIn }) => {
       navigate('/Home');
     } catch (error) {
       setIsLoggedIn(false);
-      toast.error('Invalid username or password!');
-
+      if(error.status === 400){
+        toast.error("User Not Found");
+        setIsUsernameInvalid(true);
+        setIsPasswordInvalid(true);
+      }
+      else{
+        toast.error("Invalid Password or Email");
+        setIsPasswordInvalid(true);
+        setIsUsernameInvalid(true);
+      }
       
-      setIsUsernameInvalid(true);
-      setIsPasswordInvalid(true);
     }
   };
 
+  const resetErrorStates = ()=>{
+    setIsUsernameInvalid(false);
+    setIsPasswordInvalid(false);
+  }
+
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
-    if (isUsernameInvalid) {
-      setIsUsernameInvalid(false); 
-    }
+    resetErrorStates();
   };
 
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    if (isPasswordInvalid) {
-      setIsPasswordInvalid(false); 
-    }
+    resetErrorStates();
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword); 
   };
 
   return (
@@ -70,7 +83,7 @@ const Login = ({ setIsLoggedIn }) => {
               autoFocus
               value={Username}
               onChange={handleUsernameChange}
-              error={isUsernameInvalid} 
+              error={isUsernameInvalid}
               helperText={isUsernameInvalid ? 'Invalid username' : ''}
               sx={{ '& .MuiOutlinedInput-root.Mui-error': { borderColor: 'red' } }}
             />
@@ -80,14 +93,27 @@ const Login = ({ setIsLoggedIn }) => {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               id="password"
               autoComplete="current-password"
               value={password}
               onChange={handlePasswordChange}
-              error={isPasswordInvalid} 
+              error={isPasswordInvalid}
               helperText={isPasswordInvalid ? 'Invalid password' : ''}
               sx={{ '& .MuiOutlinedInput-root.Mui-error': { borderColor: 'red' } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      onClick={toggleShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               type="submit"

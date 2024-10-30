@@ -3,6 +3,7 @@
 export const addToCart = async(cartData) => {
     const token = localStorage.getItem('token');
     const id= localStorage.getItem('id');
+    try{
     const response = await fetch('https://localhost:7178/api/CartItem', {
       method: 'POST',
       headers: {
@@ -11,11 +12,13 @@ export const addToCart = async(cartData) => {
       },
       body: JSON.stringify(cartData),
     });
-  
-    if (!response.ok) {
-      throw new Error('Failed to add product to cart');
-    }
     return response; 
+  }
+    catch (error) {
+    console.log('Error:', error);
+    }
+  
+    
   };
   
   export const getCart = async(userId) => {

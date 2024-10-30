@@ -16,7 +16,7 @@ const OrderPage = ({ userId }) => {
         setOrders(response.data);
         setLoading(false);
       } catch (err) {
-        setError('Failed to fetch orders.');
+        setError(err.response.data);
         setLoading(false);
       }
     };
